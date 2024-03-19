@@ -1,0 +1,43 @@
+[
+  {
+    "id": 1,
+    "name": "Software Engineer",
+    "salaries": [
+      {
+        "id": 1,
+        "time": 5,
+        "company": "Sergek",
+        "location": "Shymkent",
+        "price": 200000
+      },
+      {
+        "id": 2,
+        "time": 8,
+        "company": "Beeline",
+        "location": "Kyzylorda",
+        "price": 150000
+      },
+      {
+        "id": 3,
+        "time": 17,
+        "company": "Choco Family",
+        "location": "Aktobe",
+        "price": 250000
+      },
+      {
+        "id": 4,
+        "time": 29,
+        "company": "One Technologies",
+        "location": "Almaty",
+        "price": 150000
+      },
+      {
+        "id": 5,
+        "time": 45,
+        "company": "Kaspi Travel",
+        "location": "Astana",
+        "price": 550000
+      }
+    ]
+  }
+]
