@@ -1,0 +1,77 @@
+
+    .company {
+        position: relative;
+        height: 260px;
+        width: 1132px;
+        background-color: #FFFFFF;
+        display: flex;
+        flex-direction: column;
+        border-radius: 5px;
+        margin: 0 auto;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        overflow: hidden; /* Чтобы обрезать части .headerLogo, если они выходят за границы .company */
+
+        .headerImage {
+            position: relative;
+            width: 100%;
+
+            .headerWallpaper {
+                height: 150px;
+                width: 100%;
+                object-fit: cover;
+                border-radius: 5px; 
+            }
+
+            .headerLogo {
+                display: flex;
+                position: absolute;
+                top: 132px;
+                left: 45px; 
+                height: 65px;
+
+                h2 {
+                    margin-left: 15px;
+                }
+            }
+        }
+
+        .headerOption {
+            width: 170px;
+            display: flex;
+            flex-direction: row;
+            margin-top: 50px;
+            margin-left: 50px;
+            justify-content: space-between;
+            gap: 30px;
+
+            .options {
+                position: relative;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 2px;
+                transition: color 2s ease;
+                // text-decoration: underline;
+            }
+            .grey-out {
+                opacity: 0.7;
+                //   -webkit-filter: grayscale(100%);
+                //   filter: grayscale(100%);
+                //   text-decoration: underline;
+              }
+
+
+            .options:hover p, .grey-out:hover{
+                // -webkit-filter: invert(100%);
+                // filter: invert(100%);
+                color: #1c5072;
+                cursor: pointer;
+                text-decoration: underline;
+              }
+
+        }
+    }
+
+
+
+
