@@ -2,7 +2,7 @@ import { Paper, Grid, Box, Typography, ThemeProvider } from "@mui/material";
 
 import LocationOnIcon  from "@mui/icons-material/LocationOn";
 import HistoryIcon from '@mui/icons-material/History';
-import Theme from './Theme';
+import Theme from '../additional/Theme';
 
 
 const NewSalaryCard = ({salary}) => {

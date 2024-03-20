@@ -1,7 +1,7 @@
 import { Paper, Grid, Box, Typography, ThemeProvider } from "@mui/material";
 
 import HistoryIcon from '@mui/icons-material/History';
-import Theme from './Theme';
+import Theme from '../additional/Theme';
 
 const AddSalaryCard = () => {
     return (
