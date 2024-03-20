@@ -1,12 +1,18 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, Navigate } from 'react-router-dom';
 import { Container } from '@mui/material';
 
-import AppBar from './../components/header/AppBar';
+import Header from './../components/header/Header';
+
+import { useAuthContext } from "./../context/AuthContextProvider";
 
 const MainLayout = () => {
+    const { token } = useAuthContext();
+    
     return (
         <div>
-            <AppBar/> 
+            {token ? null : <Navigate to='/auth/signin' replace/>}
+            
+            <Header/>
             <Container>
                 <Outlet/>
             </Container>
