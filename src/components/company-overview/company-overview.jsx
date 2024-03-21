@@ -1,91 +1,86 @@
 import './company-overview.scss';
 import { useState, useEffect } from 'react';
-import CompanyInfo from '../company-information/company-information';
+import { getSalaries } from '../../api/api';
+import { useAuthContext } from '../../context/AuthContextProvider';
 
-const jsonData = {
-  "require": [
-    {
-      "level": "L3",
-      "levelName": "Junior",
-      "base": 50000,
-      "bonus": 10000,
-      "total": 60000
-    },
-    {
-      "level": "L4",
-      "levelName": "Middle",
-      "base": 70000,
-      "bonus": 15000,
-      "total": 85000
-    },
-    {
-      "level": "L5",
-      "levelName": "Middle-S",
-      "base": 90000,
-      "bonus": 20000,
-      "total": 110000
-    },
-    {
-      "level": "L6",
-      "levelName": "Senior",
-      "base": 120000,
-      "bonus": 50000,
-      "total": 170000
-    }
-  ]
-};
-
-export default function CompanyOverview() {
-    const [data, setData] = useState([]);
-    const [showCompanyInfo, setShowCompanyInfo] = useState(false);
+export default function CompanyOverview({ companyId }) {
+    const [salaries, setSalaries] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
+    const { token } = useAuthContext();
 
     useEffect(() => {
-        setData(jsonData.require);
+        fetchSalaries();
     }, []);
 
-    const handleBackButtonClick = () => {
-        setShowCompanyInfo(true);
+    const fetchSalaries = async () => {
+        try {
+            setLoading(true);
+            const response = await getSalaries(companyId, token); // Assuming getSalaries retrieves salaries for the given company ID
+            setSalaries(response);
+            setLoading(false);
+        } catch (error) {
+            console.error(error);
+            setError(true);
+            setLoading(false);
+        }
     };
 
-    if (showCompanyInfo) {
-        return <CompanyInfo />;
-    }
+    // Function to calculate average salary based on type (base or bonus)
+    const calculateAverage = (grade, type) => {
+        const filteredSalaries = salaries.filter(salary => salary.grade && salary.grade.toLowerCase() === grade.toLowerCase());
+        const total = filteredSalaries.reduce((acc, curr) => acc + curr.salary[type], 0);
+        return total / (filteredSalaries.length || 1); // If filteredSalaries.length is 0, return 1 to avoid division by zero
+    };
 
     return (
         <div className="container__overview">
-            <h2 className="info__title">Google Software Engineer Salaries</h2>
-            <p className="info__text">Software Engineer compensation in United States at Google ranges from $194K 
-            per year for L3 to $2.6M per year for L9. The median compensation in United States package totals $314K. 
-            View the base salary, stock, and bonus breakdowns for Google's total compensation packages. Last updated: 3/18/2024</p>
-            <h3 className="table__title">Average Compensation By Level</h3>
-            <div>
-                <table className='table'>
-                    <thead>
-                        <tr>
-                            <th>Level</th>
-                            <th>Name</th>
-                            <th>Base</th>
-                            <th>Bonus</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            data.map((d,i) => {
-                                return <tr key={i}>
-                                    <td className='level'>{d.level}</td>
-                                    <td>{d.levelName}</td>
-                                    <td>${d.base}K</td>
-                                    <td>${d.bonus}K</td>
-                                    <td className='total'>${d.total}K</td>
-                                </tr>
-                            })
-                        }
-                    </tbody>
-                </table>
-                <button className="back" onClick={handleBackButtonClick}>Back</button>
-            </div>
+            <h2 className="info__title">Software Engineer Salaries</h2>
+            {loading ? (
+                <p>Loading...</p>
+            ) : error ? (
+                <p>Error occurred while loading data</p>
+            ) : (
+                <>
+                    <table className='table'>
+                        <thead>
+                            <tr>
+                                <th>Level</th>
+                                <th>Average Base</th>
+                                <th>Average Bonus</th>
+                                <th>Average Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Intern</td>
+                                <td>{calculateAverage('intern', 'base').toFixed(0)}K</td>
+                                <td>{calculateAverage('intern', 'bonus').toFixed(0)}K</td>
+                                <td>{(calculateAverage('intern', 'base') + calculateAverage('intern', 'bonus')).toFixed(0)}K</td>
+                            </tr>
+                            <tr>
+                                <td>Junior</td>
+                                <td>{calculateAverage('junior', 'base').toFixed(0)}K</td>
+                                <td>{calculateAverage('junior', 'bonus').toFixed(0)}K</td>
+                                <td>{(calculateAverage('junior', 'base') + calculateAverage('junior', 'bonus')).toFixed(0)}K</td>
+                            </tr>
+                            <tr>
+                                <td>Middle</td>
+                                <td>{calculateAverage('middle', 'base').toFixed(0)}K</td>
+                                <td>{calculateAverage('middle', 'bonus').toFixed(0)}K</td>
+                                <td>{(calculateAverage('middle', 'base') + calculateAverage('middle', 'bonus')).toFixed(0)}K</td>
+                            </tr>
+                            <tr>
+                                <td>Senior</td>
+                                <td>{calculateAverage('senior', 'base').toFixed(0)}K</td>
+                                <td>{calculateAverage('senior', 'bonus').toFixed(0)}K</td>
+                                <td>{(calculateAverage('senior', 'base') + calculateAverage('senior', 'bonus')).toFixed(0)}K</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button className="back" onClick={() => window.history.back()}>Back</button>
+                </>
+            )}
         </div>
-    )
+    );
 }
-
