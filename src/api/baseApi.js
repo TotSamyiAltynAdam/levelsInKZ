@@ -2,7 +2,7 @@ export const baseUrl = process.env.REACT_APP_API_URL;
 
 const jsonHeader = {
   "Content-Type": "application/json",
-  "access-control-allow-origin" : "*"
+  "access-control-allow-origin": "*",
 };
 
 export const jwtHeader = (token) => ({
@@ -21,18 +21,25 @@ async function httpRequest(url, options) {
   try {
     const response = await fetch(`${baseUrl}${url}`, options);
     if (response.status >= 500) {
-      throw new Error("Сервер работает неправильно, пожалуйста, повторите попытку позже");
+      throw new Error(
+        "Сервер работает неправильно, пожалуйста, повторите попытку позже"
+      );
     }
 
     return response;
   } catch (error) {
     console.log(error);
-    throw new Error("Сеть работает неправильно, пожалуйста, проверьте конфигурацию сети");
+    throw new Error(
+      "Сеть работает неправильно, пожалуйста, проверьте конфигурацию сети"
+    );
   }
 }
 
 export async function getRequest(path, options) {
-  const queryParams = options && options.query ? `?${new URLSearchParams(options.query).toString()}` : '';
+  const queryParams =
+    options && options.query
+      ? `?${new URLSearchParams(options.query).toString()}`
+      : "";
   const requestUrl = `${path}${queryParams}`;
 
   return await httpRequest(requestUrl, options);
@@ -52,7 +59,7 @@ export async function postRequest(path, options) {
   return await httpRequest(path, requestOptions);
 }
 
-export async function deleteRequest(path, options){
+export async function deleteRequest(path, options) {
   const requestOptions = {
     ...options,
     method: "DELETE",
@@ -66,7 +73,7 @@ export async function deleteRequest(path, options){
   return await httpRequest(path, requestOptions);
 }
 
-export async function patchRequest(path, options){
+export async function patchRequest(path, options) {
   const requestOptions = {
     ...options,
     method: "PATCH",
@@ -76,7 +83,10 @@ export async function patchRequest(path, options){
     },
     body: options?.body ? JSON.stringify(options.body) : null,
   };
-  const queryParams = options && options.query ? `?${new URLSearchParams(options.query).toString()}` : '';
+  const queryParams =
+    options && options.query
+      ? `?${new URLSearchParams(options.query).toString()}`
+      : "";
   const requestUrl = `${path}${queryParams}`;
 
   return await httpRequest(requestUrl, requestOptions);
