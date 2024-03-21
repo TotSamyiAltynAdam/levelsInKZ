@@ -17,12 +17,12 @@ const Home = () => {
     const [specializations, setSpecializations] = useState([]);
     const [salaries, setSalaries] = useState([]);
     const [chosenSpecialization, setChosenSpecialization] = useState(null);
+    const [selectedCompanies, setSelectedCompanies] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
 
     useEffect(() => {
         if(token != null) {
-            // updateCompanyList();
             updateSpecializationList();
         }
     }, []);
@@ -30,13 +30,8 @@ const Home = () => {
     useEffect(() => {
        if(chosenSpecialization){
            updateSalaryList();
+           updateCompanyList();
        }
-    },[chosenSpecialization]);
-
-    useEffect(() => {
-        if(chosenSpecialization){
-            updateCompanyList();
-        }
     },[chosenSpecialization]);
 
     useEffect(() => {
@@ -98,6 +93,15 @@ const Home = () => {
     const handleSpecializationSelect = (specialization) => {
         setChosenSpecialization(specialization);
     };
+    const toggleCompanySelection = (companyName) => {
+        setSelectedCompanies(prevCompanies => {
+            if (prevCompanies.includes(companyName)) {
+                return prevCompanies.filter(company => company !== companyName);
+            } else {
+                return [...prevCompanies, companyName];
+            }
+        });
+    };
 
     return (
         <>
@@ -154,13 +158,17 @@ const Home = () => {
                 </Typography>
                 <Grid container spacing={2}>
                     {companies.map((company, index) => (
-                        <BtnLinkToCompany key={index} name={company.companyName}/>
+                        <BtnLinkToCompany
+                            key={index}
+                            name={company.companyName}
+                            onClick={toggleCompanySelection}
+                        />
                     ))}
                 </Grid>
             </div>
 
             <div className="barChartBlock">
-                <BarChartBlock/>
+                <BarChartBlock selectedCompanies={selectedCompanies}/>
             </div>
         </>
     )
