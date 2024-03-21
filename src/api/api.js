@@ -113,3 +113,19 @@ export async function getSpecializationById(token, id){
     }
     return await response.json();
 }
+
+export async function getSalaries(token) {
+  const response = await getRequest("/api/salaries", {
+    headers: jwtHeader(token),
+  });
+  if (!response.ok) {
+    throw new ApiError("Not found", response.status);
+  }
+  const salaries = await response.json();
+  const transformedSalaries = salaries.map((item) => ({
+    ...item,
+    salary: item.salary || { base: 0, bonus: 0 },
+  }));
+
+  return transformedSalaries;
+}
