@@ -1,9 +1,9 @@
 import BtnLinkToCompany from '../../components/BtnLinkToCompany';
 
-const BarChart = () => {
+const BarChart = ({company}) => {
     return (
         <div>
-            <BtnLinkToCompany key={1} name={"Sergek"}/>
+            <BtnLinkToCompany key={company} name={company} disable={true}/>
         </div>
     )
 }

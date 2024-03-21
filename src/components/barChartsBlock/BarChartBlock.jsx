@@ -2,12 +2,12 @@ import BarChart from "./BarChart";
 
 import './barChartBlock.scss';
 
-const BarChartBlock = () => {
+const BarChartBlock = ({selectedCompanies}) => {
     return (
         <div className="listOfBarCharts">
-            <BarChart/>
-            <BarChart/>
-            <BarChart/>
+            {selectedCompanies.map((company) => (
+                <BarChart company={company} key={company}/>
+            ))}
         </div>
     )
 }
