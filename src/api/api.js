@@ -27,7 +27,8 @@ export async function getSpecializations(token){
     if(!response.ok){
         throw new ApiError('Not found', response.status);
     }
-    return await response.json();
+    const data = await response.json();
+    return data.slice(0, 5);
 }
 
 export async function getSpecializationById(token, id){

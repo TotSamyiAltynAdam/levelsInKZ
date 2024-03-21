@@ -12,6 +12,25 @@ import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 
 export default function Header() {
+    // const updateCompanyList = async () => {
+    //   try{
+    //       onCompanyLoading();
+    //       const response = await getCompanies(token);
+    //       onContainersLoaded(response);
+    //   }catch(error){
+    //       console.log(error)
+    //       onError(error);
+    //   }
+    // };
+
+    // const onCompaniesLoaded = (newCompanies) => {
+    //     setCompanies(newCompanies);
+    //     setLoading(false);
+    // }
+
+    // const onCompanyLoading = () => {
+    //     setLoading(true);
+    // };
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static" style={{ backgroundColor: "#285975" }}>

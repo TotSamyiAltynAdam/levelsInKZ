@@ -10,7 +10,7 @@ import './home.scss';
 import fields_and_salaries from '../../api/salariesByField.json';
 import fields_and_companies from '../../api/companiesByField.json';
 
-import {getCompanies, getSpecializations} from '../../api/api';
+import { getSpecializations } from '../../api/api';
 import { useAuthContext } from '../../context/AuthContextProvider';
 
 
@@ -18,24 +18,17 @@ const Home = () => {
     const {token} = useAuthContext();
     const [companies, setCompanies] = useState([]);
     const [specializations, setSpecializations] = useState([]);
+    const [chosenSpecialization, setChosenSpecialization] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
 
     useEffect(() => {
-        // updateCompanyList();
-        updateSpecializationList();
+        if(token != null) {
+            // updateCompanyList();
+            updateSpecializationList();
+        }
     }, []);
 
-    // const updateCompanyList = async () => {
-    //   try{
-    //       onCompanyLoading();
-    //       const response = await getCompanies(token);
-    //       onContainersLoaded(response);
-    //   }catch(error){
-    //       console.log(error)
-    //       onError(error);
-    //   }
-    // };
     const updateSpecializationList = async () => {
         try {
             onSpecializationLoading();
@@ -47,22 +40,15 @@ const Home = () => {
         }
     };
 
-    // const onContainersLoaded = (newCompanies) => {
-    //     setCompanies(newCompanies);
-    //     setLoading(false);
-    // }
+
     const onSpecializationLoaded = (newSpecializations) => {
         setSpecializations(newSpecializations);
         setLoading(false);
     }
 
-    // const onCompanyLoading = () => {
-    //     setLoading(true);
-    // };
     const onSpecializationLoading = () => {
         setLoading(true);
     };
-
 
     const onError = () => {
         setLoading(false);

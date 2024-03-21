@@ -15,7 +15,7 @@ const SignIn = () => {
   const handleSubmit = async (values) => {
     try {
       const response = await signIn(values);
-      // setToken(response.token);
+      setToken(response.token);
       localStorage.setItem("token", response.token);
       navigate("/");
     } catch (error) {
