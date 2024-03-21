@@ -18,17 +18,17 @@ const NewSalaryCard = ({salary}) => {
                 >
                     <HistoryIcon sx={{width: 17}}/>
                     <Typography variant="body1" color="text.secondary" marginLeft={0.5}>
-                        {salary.time} minutes ago
+                        t minutes ago
                     </Typography>
                 </Box>
                 <Paper elevation={3} sx={{borderRadius: 3, backgroundColor: '#E7E7E7', cursor: 'pointer'}}>
                     <Box paddingX={2} paddingY={1.3}>
                         <Typography variant="body2">
-                            {salary.company}
+                            {salary.company.name}
                         </Typography>
 
                         <Typography variant="blackBold">
-                            {salary.price}$
+                            {salary.salary.base}$
                         </Typography>
 
                         <Box
@@ -40,7 +40,7 @@ const NewSalaryCard = ({salary}) => {
                         >
                             <LocationOnIcon sx={{width: 17}}/>
                             <Typography variant="body2" component="p" marginLeft={0.2}>
-                                {salary.location}
+                                {salary.location.name}
                             </Typography>
                         </Box>
                     </Box>
