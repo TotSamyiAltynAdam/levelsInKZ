@@ -1,5 +1,8 @@
-import * as React from "react";
 import { NavLink } from "react-router-dom";
+import { useEffect, useState } from 'react';
+
+import {Container} from "@mui/material";
+import StairsIcon from '@mui/icons-material/Stairs';
 
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -11,105 +14,114 @@ import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 
+import { getCompanies } from '../../api/api';
+import { useAuthContext } from '../../context/AuthContextProvider';
+
 export default function Header() {
-    // const updateCompanyList = async () => {
-    //   try{
-    //       onCompanyLoading();
-    //       const response = await getCompanies(token);
-    //       onContainersLoaded(response);
-    //   }catch(error){
-    //       console.log(error)
-    //       onError(error);
-    //   }
-    // };
+    const { token } = useAuthContext();
+    const [companies, setCompanies] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
 
-    // const onCompaniesLoaded = (newCompanies) => {
-    //     setCompanies(newCompanies);
-    //     setLoading(false);
-    // }
+    useEffect(() => {
+       updateCompanyList();
+    }, []);
 
-    // const onCompanyLoading = () => {
-    //     setLoading(true);
-    // };
+    const updateCompanyList = async () => {
+      try{
+          onCompanyLoading();
+          const response = await getCompanies(token);
+          onCompaniesLoaded(response);
+      }catch(error){
+          console.log(error)
+          onError(error);
+      }
+    };
+    const onCompanyLoading = () => {
+        setLoading(true);
+    };
+
+    const onCompaniesLoaded = (newCompanies) => {
+        setCompanies(newCompanies);
+        setLoading(false);
+    }
+
+    const onError = () => {
+        setLoading(false);
+        setError(true);
+    }
+
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static" style={{ backgroundColor: "#285975" }}>
-                <Toolbar>
-                    <NavLink
-                        to="/"
-                        style={{
-                            textDecoration: "none",
-                            color: "white",
-                            marginRight: "85px",
-                        }}
-                    >
-                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                            <svg
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <path
-                                    d="M4 18H8V14H12V10H16V6H20"
-                                    stroke="white"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                />
-                            </svg>
-                            Levels.fyi
-                        </Typography>
-                    </NavLink>
-                    <Paper
-                        component="form"
-                        sx={{
-                            p: "2px 4px",
-                            display: "flex",
-                            alignItems: "center",
-                            width: 400,
-                            marginRight: "700px",
-                            borderRadius: "13px",
-                        }}
-                    >
-                        <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
-                            <SearchIcon />
-                        </IconButton>
-                        <InputBase
-                            sx={{ ml: 1, flex: 1 }}
-                            placeholder="Search By Company, Title, or City"
-                            inputProps={{ "aria-label": "search google maps" }}
-                        />
-                    </Paper>
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                        <NavLink to="/auth/signin">
-                            <Button
-                                sx={{
-                                    backgroundColor: "#163A4E",
-                                    marginRight: "13px",
-                                    borderRadius: "5px",
-                                    color: "white",
-                                }}
-                                color="inherit"
-                            >
-                                Sign In
-                            </Button>
-                        </NavLink>
-                        <NavLink to="/auth/signup">
-                            <Button
-                                sx={{
-                                    backgroundColor: "#D9D9D9",
-                                    color: "#6D6D6D",
-                                    borderRadius: "5px",
-                                }}
-                                color="inherit"
-                            >
-                                Sign Up
-                            </Button>
-                        </NavLink>
-                    </Box>
-                </Toolbar>
+               <Container>
+                   <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                       <Box sx={{display: 'flex', height: '80px', alignItems: 'center'}}>
+                           <NavLink to="/" style={{textDecoration: "none", color: "white"}}>
+                               <Box sx={{display: 'flex', justifyContent: 'space-between', width: '90px', alignItems: 'center'}}>
+                                   <StairsIcon/>
+                                   Levels.fyi
+                               </Box>
+                           </NavLink>
+                           <Paper
+                               component="form"
+                               sx={{
+                                   marginLeft: '158px',
+                                   width: 376,
+                                   padding: "0 20px",
+                                   display: "flex",
+                                   justifyContent : "space-between",
+                                   alignItems: "center",
+                                   borderRadius: "10px"
+                               }}
+                           >
+                               <IconButton type="button" sx={{p: "8px"}} aria-label="search">
+                                   <SearchIcon/>
+                               </IconButton>
+                               <input
+                                   type="text"
+                                   placeholder="Search By Company, Title, or City"
+                                   style={{marginLeft: '7px', flex: 1, border: 'none'}}
+                               />
+                           </Paper>
+                       </Box>
+                       <Box
+                           sx={{
+                               width: '192px',
+                               display: "flex",
+                               alignItems: "center",
+                               justifyContent: 'space-between'
+                           }}
+                       >
+                           <NavLink to="/auth/signin">
+                               <Button
+                                   sx={{
+                                       width: '88px',
+                                       backgroundColor: "#163A4E",
+                                       color: "white",
+                                       borderRadius: "10px"
+                                   }}
+                                   color="inherit"
+                               >
+                                   Sign In
+                               </Button>
+                           </NavLink>
+                           <NavLink to="/auth/signup">
+                               <Button
+                                   sx={{
+                                       width: '88px',
+                                       backgroundColor: "#E7E7E7",
+                                       color: "#8E8E93",
+                                       borderRadius: "10px",
+                                   }}
+                                   color="inherit"
+                               >
+                                   Sign Up
+                               </Button>
+                           </NavLink>
+                       </Box>
+                   </Box>
+               </Container>
             </AppBar>
         </Box>
     );
