@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useEffect, useState } from 'react';
 
 import {Container} from "@mui/material";
@@ -6,26 +6,39 @@ import StairsIcon from '@mui/icons-material/Stairs';
 
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 
+import ModalWindow from '../modalWindow/ModalWindow';
+
 import { getCompanies } from '../../api/api';
 import { useAuthContext } from '../../context/AuthContextProvider';
 
 export default function Header() {
     const { token } = useAuthContext();
+    const navigate = useNavigate();
     const [companies, setCompanies] = useState([]);
+    const [filteredCompanies, setFilteredCompanies] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [modalSearchCompanyActive, setModalSearchCompanyActive] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
 
     useEffect(() => {
-       updateCompanyList();
+        if(token) {
+            updateCompanyList();
+        }
     }, []);
+
+    useEffect(() => {
+        const filtered = companies.filter(company =>
+            company.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        setFilteredCompanies(filtered);
+    }, [searchQuery, companies]);
 
     const updateCompanyList = async () => {
       try{
@@ -50,6 +63,9 @@ export default function Header() {
         setLoading(false);
         setError(true);
     }
+    const handleSearchChange = (event) => {
+        setSearchQuery(event.target.value);
+    };
 
     return (
         <Box sx={{ flexGrow: 1 }}>
@@ -78,11 +94,32 @@ export default function Header() {
                                <IconButton type="button" sx={{p: "8px"}} aria-label="search">
                                    <SearchIcon/>
                                </IconButton>
-                               <input
+                               <InputBase
                                    type="text"
                                    placeholder="Search By Company, Title, or City"
                                    style={{marginLeft: '7px', flex: 1, border: 'none'}}
+                                   value={searchQuery}
+                                   onChange={handleSearchChange}
+                                   onClick={() => setModalSearchCompanyActive(true)}
                                />
+                               <ModalWindow
+                                   active={modalSearchCompanyActive}
+                                   setActive={setModalSearchCompanyActive}
+                                   position="bottom">
+                                   <Box sx={{ maxHeight: '200px', width: '376px', overflowY: 'auto' }}>
+                                       {filteredCompanies.map(company => (
+                                           <NavLink
+                                               key={company._id}
+                                               to={`/company/${company._id}`}
+                                               onClick={() => setModalSearchCompanyActive(false)}
+                                           >
+                                               <div>
+                                                   {company.name}
+                                               </div>
+                                           </NavLink>
+                                       ))}
+                                   </Box>
+                               </ModalWindow>
                            </Paper>
                        </Box>
                        <Box

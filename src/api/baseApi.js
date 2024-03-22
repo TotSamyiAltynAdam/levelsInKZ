@@ -1,8 +1,7 @@
 export const baseUrl = process.env.REACT_APP_API_URL;
 
 const jsonHeader = {
-  "Content-Type": "application/json",
-  "access-control-allow-origin" : "*"
+  "Content-Type": "application/json"
 };
 
 export const jwtHeader = (token) => ({

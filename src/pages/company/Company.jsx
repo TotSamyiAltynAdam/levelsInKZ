@@ -8,8 +8,7 @@ import './company-page.scss';
 
 
 const Company = () => {
-  const [selectedTab, setSelectedTab] = useState('Overview');
-
+    const [selectedTab, setSelectedTab] = useState('Overview');
     return (
         <div className="main">
             <div className="company__header">
