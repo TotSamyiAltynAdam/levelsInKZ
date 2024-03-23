@@ -1,16 +1,18 @@
-import { NavLink, useNavigate } from "react-router-dom";
 import { useEffect, useState } from 'react';
-
-import {Container} from "@mui/material";
-import StairsIcon from '@mui/icons-material/Stairs';
-
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-import Paper from "@mui/material/Paper";
-import InputBase from "@mui/material/InputBase";
+import { NavLink } from "react-router-dom";
+import {
+    Container,
+    AppBar,
+    Typography,
+    Box,
+    Button,
+    IconButton,
+    Paper,
+    InputBase
+} from "@mui/material";
+import StairsIcon from "@mui/icons-material/Stairs";
 import SearchIcon from "@mui/icons-material/Search";
+import PersonIcon from '@mui/icons-material/Person';
 
 import ModalWindow from '../modalWindow/ModalWindow';
 
@@ -19,7 +21,7 @@ import { useAuthContext } from '../../context/AuthContextProvider';
 
 export default function Header() {
     const { token } = useAuthContext();
-    const navigate = useNavigate();
+    const tokenExist = token && localStorage.getItem("token")!=='undefined';
     const [companies, setCompanies] = useState([]);
     const [filteredCompanies, setFilteredCompanies] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
@@ -28,7 +30,7 @@ export default function Header() {
     const [error, setError] = useState(false);
 
     useEffect(() => {
-        if(token) {
+        if(tokenExist) {
             updateCompanyList();
         }
     }, []);
@@ -130,32 +132,51 @@ export default function Header() {
                                justifyContent: 'space-between'
                            }}
                        >
-                           <NavLink to="/auth/signin">
-                               <Button
-                                   sx={{
-                                       width: '88px',
-                                       backgroundColor: "#163A4E",
-                                       color: "white",
-                                       borderRadius: "10px"
-                                   }}
-                                   color="inherit"
-                               >
-                                   Sign In
-                               </Button>
-                           </NavLink>
-                           <NavLink to="/auth/signup">
-                               <Button
-                                   sx={{
-                                       width: '88px',
-                                       backgroundColor: "#E7E7E7",
-                                       color: "#8E8E93",
-                                       borderRadius: "10px",
-                                   }}
-                                   color="inherit"
-                               >
-                                   Sign Up
-                               </Button>
-                           </NavLink>
+                           {tokenExist ? (
+                               <NavLink to='/' style={{ textDecoration: 'none' }}>
+                                   <Box
+                                       sx={{
+                                           display: 'flex',
+                                           padding: '8px',
+                                           border: '1px solid white',
+                                           borderRadius: '50px',
+                                           cursor: 'pointer',
+                                           color: 'white'
+                                       }}
+                                   >
+                                       <PersonIcon/>
+                                   </Box>
+                               </NavLink>
+                           ) : (
+                               <>
+                               <NavLink to="/auth/signin">
+                                   <Button
+                                       sx={{
+                                           width: '88px',
+                                           backgroundColor: "#163A4E",
+                                           color: "white",
+                                           borderRadius: "10px"
+                                       }}
+                                       color="inherit"
+                                   >
+                                       Sign In
+                                   </Button>
+                               </NavLink>
+                               <NavLink to="/auth/signup">
+                                   <Button
+                                       sx={{
+                                           width: '88px',
+                                           backgroundColor: "#E7E7E7",
+                                           color: "#8E8E93",
+                                           borderRadius: "10px",
+                                       }}
+                                       color="inherit"
+                                   >
+                                       Sign Up
+                                   </Button>
+                               </NavLink>
+                               </>
+                           )}
                        </Box>
                    </Box>
                </Container>
