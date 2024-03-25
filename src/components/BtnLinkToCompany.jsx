@@ -1,14 +1,18 @@
 import { Paper, Grid, Box, Typography } from "@mui/material";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import companyIcon from './../resources/icons/brand-twitter.svg';
 
-const BtnLinkToCompany = ({name, onClick, disable}) => {
+const BtnLinkToCompany = ({company, onClick, chosenSpecialization}) => {
     const [selected, setSelected] = useState(false);
+
+    useEffect(()=>{
+        setSelected(false);
+    }, [chosenSpecialization]);
 
     const handleClick = () => {
         setSelected(!selected);
-        onClick(name);
+        onClick(company);
     };
 
     return (
@@ -22,7 +26,7 @@ const BtnLinkToCompany = ({name, onClick, disable}) => {
                     backgroundColor: selected ? '#2F599C' : 'transparent',
                     color: selected ? 'white' : 'inherit'
                 }}
-                onClick={!disable ? handleClick : undefined}
+                onClick={handleClick}
             >
                 <Box 
                     sx = {{
@@ -34,7 +38,7 @@ const BtnLinkToCompany = ({name, onClick, disable}) => {
                 >
                     <img src={companyIcon} alt="companyIcon" />
                     <Typography variant="body2" sx={{marginLeft: '2px'}}>
-                        {name}
+                        {company.companyName}
                     </Typography>
                 </Box>
             </Paper>

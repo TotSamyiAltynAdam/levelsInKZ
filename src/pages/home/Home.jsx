@@ -31,6 +31,7 @@ const Home = () => {
        if(chosenSpecialization){
            updateSalaryList();
            updateCompanyList();
+           setSelectedCompanies([]);
        }
     },[chosenSpecialization]);
 
@@ -93,12 +94,13 @@ const Home = () => {
     const handleSpecializationSelect = (specialization) => {
         setChosenSpecialization(specialization);
     };
-    const toggleCompanySelection = (companyName) => {
+    const toggleCompanySelection = (company) => {
         setSelectedCompanies(prevCompanies => {
-            if (prevCompanies.includes(companyName)) {
-                return prevCompanies.filter(company => company !== companyName);
+            const index = prevCompanies.findIndex(prevCompany => prevCompany.companyName === company.companyName);
+            if(index !== -1){
+                return [...prevCompanies.slice(0, index), ...prevCompanies.slice(index + 1)];
             } else {
-                return [...prevCompanies, companyName];
+                return [...prevCompanies, company];
             }
         });
     };
@@ -160,8 +162,9 @@ const Home = () => {
                     {companies.map((company, index) => (
                         <BtnLinkToCompany
                             key={index}
-                            name={company.companyName}
+                            company={company}
                             onClick={toggleCompanySelection}
+                            chosenSpecialization={chosenSpecialization}
                         />
                     ))}
                 </Grid>
