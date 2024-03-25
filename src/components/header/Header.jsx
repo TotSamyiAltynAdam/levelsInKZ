@@ -13,6 +13,7 @@ import {
 import StairsIcon from "@mui/icons-material/Stairs";
 import SearchIcon from "@mui/icons-material/Search";
 import PersonIcon from '@mui/icons-material/Person';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 import ModalWindow from '../modalWindow/ModalWindow';
 import './header.scss';
@@ -118,60 +119,70 @@ export default function Header() {
                                </ModalWindow>
                            </Paper>
                        </Box>
-                       <Box
-                           sx={{
-                               width: '192px',
-                               display: "flex",
-                               alignItems: "center",
-                               justifyContent: 'space-between'
-                           }}
-                       >
+                       <>
                            {tokenExist ? (
-                               <NavLink to='/' style={{ textDecoration: 'none' }}>
-                                   <Box
-                                       sx={{
-                                           display: 'flex',
-                                           padding: '8px',
-                                           border: '1px solid white',
-                                           borderRadius: '50px',
-                                           cursor: 'pointer',
-                                           color: 'white'
-                                       }}
-                                   >
-                                       <PersonIcon/>
-                                   </Box>
-                               </NavLink>
+                               <Box
+                                   sx={{
+                                       display: 'flex',
+                                       width: '70px',
+                                       justifyContent: 'space-between'
+                                   }}
+                               >
+                                   <NavLink to='/'>
+                                       <PersonIcon
+                                           sx={{
+                                               border: '1px solid white',
+                                               borderRadius: '50px',
+                                               color: 'white',
+                                               cursor: 'pointer',
+                                           }}
+                                       />
+                                   </NavLink>
+                                   <NavLink to='/auth/logout'>
+                                       <LogoutIcon
+                                           sx={{
+                                               color: 'white'
+                                           }}
+                                       />
+                                   </NavLink>
+                               </Box>
                            ) : (
-                               <>
-                               <NavLink to="/auth/signin">
-                                   <Button
-                                       sx={{
-                                           width: '88px',
-                                           backgroundColor: "#163A4E",
-                                           color: "white",
-                                           borderRadius: "10px"
-                                       }}
-                                       color="inherit"
-                                   >
-                                       Sign In
-                                   </Button>
-                               </NavLink>
-                               <NavLink to="/auth/signup">
-                                   <Button
-                                       sx={{
-                                           width: '88px',
-                                           backgroundColor: "#E7E7E7",
-                                           color: "#8E8E93",
-                                           borderRadius: "10px",
-                                       }}
-                                       color="inherit"
-                                   >
-                                       Sign Up
-                                   </Button>
-                               </NavLink>
-                               </>
+                               <Box
+                                   sx={{
+                                       width: '192px',
+                                       display: 'flex',
+                                       justifyContent: 'space-between'
+                                   }}
+                               >
+                                   <NavLink to="/auth/signin">
+                                       <Button
+                                           sx={{
+                                               width: '88px',
+                                               backgroundColor: "#163A4E",
+                                               color: "white",
+                                               borderRadius: "10px"
+                                           }}
+                                           color="inherit"
+                                       >
+                                           Sign In
+                                       </Button>
+                                   </NavLink>
+                                   <NavLink to="/auth/signup">
+                                       <Button
+                                           sx={{
+                                               width: '88px',
+                                               backgroundColor: "#E7E7E7",
+                                               color: "#8E8E93",
+                                               borderRadius: "10px",
+                                           }}
+                                           color="inherit"
+                                       >
+                                           Sign Up
+                                       </Button>
+                                   </NavLink>
+                               </Box>
                            )}
-                       </Box>
+                       </>
                    </Box>
                </Container>
             </AppBar>
