@@ -22,10 +22,11 @@
     transform: scale(0.5);
     transition: 0.4s all;
     background-color: white;
+    border-radius: 0 0 10px 10px;
     &.bottom {
       position: fixed;
-      top: 61px;
-      right: 878px;
+      top: 60px;
+      right: 869px;
     }
     &.active {
       transform: scale(1);

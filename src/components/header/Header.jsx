@@ -15,6 +15,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import PersonIcon from '@mui/icons-material/Person';
 
 import ModalWindow from '../modalWindow/ModalWindow';
+import './header.scss';
 
 import { getCompanies } from '../../api/api';
 import { useAuthContext } from '../../context/AuthContextProvider';
@@ -83,15 +84,7 @@ export default function Header() {
                            </NavLink>
                            <Paper
                                component="form"
-                               sx={{
-                                   marginLeft: '158px',
-                                   width: 376,
-                                   padding: "0 20px",
-                                   display: "flex",
-                                   justifyContent : "space-between",
-                                   alignItems: "center",
-                                   borderRadius: "10px"
-                               }}
+                               className={`searchInput ${modalSearchCompanyActive ? 'active' : ''}`}
                            >
                                <IconButton type="button" sx={{p: "8px"}} aria-label="search">
                                    <SearchIcon/>
@@ -114,8 +107,9 @@ export default function Header() {
                                                key={company._id}
                                                to={`/company/${company._id}`}
                                                onClick={() => setModalSearchCompanyActive(false)}
+                                               className="searchInput_item"
                                            >
-                                               <div>
+                                               <div className="searchInput_item_text">
                                                    {company.name}
                                                </div>
                                            </NavLink>
