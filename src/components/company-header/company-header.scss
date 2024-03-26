@@ -1,76 +1,43 @@
-
-    .company {
-        position: relative;
-        height: 260px;
-        width: 1132px;
-        background-color: #FFFFFF;
-        display: flex;
-        flex-direction: column;
-        border-radius: 5px;
-        margin: 0 auto;
-        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-        overflow: hidden; /* Чтобы обрезать части .headerLogo, если они выходят за границы .company */
-
-        .headerImage {
-            position: relative;
+.company {
+    margin-top: 30px;
+    height: 320px;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0 5px 15px;
+    .headerImage {
+        .headerWallpaper {
+            height: 180px;
             width: 100%;
-
-            .headerWallpaper {
-                height: 150px;
-                width: 100%;
-                object-fit: cover;
-                border-radius: 5px; 
-            }
-
-            .headerLogo {
-                display: flex;
-                position: absolute;
-                top: 132px;
-                left: 45px; 
-                height: 65px;
-
-                h2 {
-                    margin-left: 15px;
-                }
-            }
+            object-fit: cover;
+            border-radius: 5px 5px 0 0;
         }
-
-        .headerOption {
-            width: 170px;
+        .headerLogo {
             display: flex;
-            flex-direction: row;
-            margin-top: 50px;
-            margin-left: 50px;
-            justify-content: space-between;
-            gap: 30px;
-
-            .options {
-                position: relative;
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                gap: 2px;
-                transition: color 2s ease;
-                // text-decoration: underline;
+            align-items: center;
+            margin-left: 30px;
+            h2 {
+                margin-left: 10px;
             }
-            .grey-out {
-                opacity: 0.7;
-                //   -webkit-filter: grayscale(100%);
-                //   filter: grayscale(100%);
-                //   text-decoration: underline;
-              }
-
-
-            .options:hover p, .grey-out:hover{
-                // -webkit-filter: invert(100%);
-                // filter: invert(100%);
-                color: #1c5072;
-                cursor: pointer;
-                text-decoration: underline;
-              }
-
         }
     }
+    .headerOption {
+        width: 200px;
+        display: flex;
+        margin-top: 30px;
+        margin-left: 30px;
+        justify-content: space-between;
+        .options {
+            display: flex;
+            align-items: center;
+        }
+        .grey-out {
+            opacity: 0.7;
+        }
+        .options:hover p, .grey-out:hover{
+            color: #285975;
+            cursor: pointer;
+        }
+    }
+}
 
 
 

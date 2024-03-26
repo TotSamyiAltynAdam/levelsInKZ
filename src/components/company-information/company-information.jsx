@@ -1,57 +1,37 @@
-import './company-information.scss';
 import { useState, useEffect } from 'react';
-import CompanyOverview from '../company-overview/company-overview';
-import { getCompaniesBySpecialization,getCompanies} from '../../api/api';
-import { useAuthContext } from '../../context/AuthContextProvider';
 
-export default function CompanyInfo() {
-    const [showCompanyInfoState, setShowCompanyInfoState] = useState(true);
+import './company-information.scss';
+
+import { getSpecializationsByCompany } from '../../api/api';
+import { useAuthContext } from '../../context/AuthContextProvider';
+import CompanyOverview from "../company-overview/company-overview";
+
+export default function CompanyInfo({company}) {
     const {token} = useAuthContext();
     const [specializations, setSpecializations] = useState([]);
+    const [selectedSpecialization, setSelectedSpecialization] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
-    const [companies, setCompanies] = useState([]);
 
     useEffect(() => {
-        updateCompanyList();
-        updateSpecializationList();
-    }, []);
-
-    const updateCompanyList = async () => {
-      try{
-          onCompanyLoading();
-          const response = await getCompanies(token);
-          onContainersLoaded(response);
-      }catch(error){
-          console.log(error)
-          onError(error);
-      }
-    };
-
+        if(company._id){
+            updateSpecializationList();
+        }
+    }, [company, selectedSpecialization]);
 
     const updateSpecializationList = async () => {
         try {
             onSpecializationLoading();
-            const response = await getCompaniesBySpecialization(token);
+            const response = await getSpecializationsByCompany(token, company.name);
             onSpecializationLoaded(response);
         } catch (error) {
-            console.log(error)
             onError(error);
         }
     };
 
-    const onContainersLoaded = (newCompanies) => {
-        setCompanies(newCompanies);
-        setLoading(false);
-    }
-
     const onSpecializationLoaded = (newSpecializations) => {
         setSpecializations(newSpecializations);
         setLoading(false);
-    };
-
-    const onCompanyLoading = () => {
-        setLoading(true);
     };
 
     const onSpecializationLoading = () => {
@@ -63,25 +43,32 @@ export default function CompanyInfo() {
         setError(true);
     };
 
-    const handleInfoClick = () => {
-        setShowCompanyInfoState(false);
+    const handleSpecializationClick = (specialization) => {
+        setSelectedSpecialization(specialization);
     };
 
     return (
-        <div className='asd'>
-            {showCompanyInfoState && (
+        <div>
+            {selectedSpecialization ? (
+                <CompanyOverview companyName={company.name} specializationName={selectedSpecialization.specialization.name}/>
+            ) : (
                 <div className="container">
-                    <h2 className="info__title">Google</h2>
+                    <h2 className="info__title">{company.name} Salaries</h2>
+
                     <p className="info__text">
                         Google's salary ranges from $97,496 in total compensation per year for an Administrative Assistant at the low-end to $2,595,038 for a Software Engineer at the high-end. Levels.fyi collects anonymous and verified salaries from current and former employees of Google. Last updated: 3/18/2024
                     </p>
+
                     {specializations.length > 0 ? (
                         specializations.map((specialization, index) => (
-                            <div key={index}>
-                                <div className="info__salary" onClick={handleInfoClick}>
-                                    <p className="info__salary__special">{specialization.name}</p>
+                            <div key={index} onClick={() => handleSpecializationClick(specialization)}>
+                                <div className="info__salary">
+                                    <p className="info__salary__special">{specialization.specialization.name}</p>
                                     <div className="level__price">
-                                        <p>{specialization.salary}$</p>
+                                        <p>Base: {specialization.salary.base}$</p>
+                                    </div>
+                                    <div className="level__price">
+                                        <p>Bonus: {specialization.salary.bonus}$</p>
                                     </div>
                                 </div>
                             </div>
@@ -91,8 +78,6 @@ export default function CompanyInfo() {
                     )}
                 </div>
             )}
-
-            {!showCompanyInfoState && <CompanyOverview />}
         </div>
     );
 }

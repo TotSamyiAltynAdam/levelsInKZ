@@ -19,6 +19,15 @@ export async function getCompanies(token){
     }
     return await response.json();
 }
+export async function getCompanyById(token, companyId){
+    const response = await getRequest(`/api/companies/${companyId}`, {
+        headers: jwtHeader(token)
+    });
+    if(!response.ok){
+        throw new ApiError('Not found', response.status);
+    }
+    return await response.json();
+}
 export async function getCompaniesBySpecialization(token, specializationName) {
     const response = await getRequest('/api/salaries', {
         header: jwtHeader(token)
@@ -77,6 +86,26 @@ export async function getFiveSpecializations(token){
     const data = await response.json();
     return data.slice(0, 5);
 }
+export async function getSpecializationsByCompany(token, companyName) {
+    const response = await getRequest('/api/salaries', {
+        header: jwtHeader(token)
+    });
+    if(!response.ok){
+        throw new ApiError('Not Found', response.status);
+    }
+
+    const data = await response.json();
+    const filteredData = data.filter(salary => (
+        salary &&
+        salary.company &&
+        salary.salary &&
+        salary.salary.base &&
+        salary.company.name === companyName &&
+        salary.specialization &&
+        typeof salary.specialization.name === 'string'
+    ));
+    return filteredData.slice(0,5);
+}
 
 export async function getSalariesBySpecialization(token, specializationName){
     const response = await getRequest('/api/salaries', {
@@ -103,29 +132,51 @@ export async function getSalariesBySpecialization(token, specializationName){
     return validData.slice(0, 5);
 }
 
-export async function getSpecializationById(token, id){
-    const response = await getRequest(`/api/containers/${id}`, {
-        headers: jwtHeader(token),
-        credentials: 'include',
+export async function getStatisticsByCompanyAndSpecialization(token, companyName, specializationName) {
+    const response = await getRequest('/api/salaries', {
+        header: jwtHeader(token)
     });
     if(!response.ok){
-        throw new ApiError('Unknown error', response.status);
+        throw new ApiError('Not Found', response.status);
     }
-    return await response.json();
-}
 
-export async function getSalaries(token) {
-  const response = await getRequest("/api/salaries", {
-    headers: jwtHeader(token),
-  });
-  if (!response.ok) {
-    throw new ApiError("Not found", response.status);
-  }
-  const salaries = await response.json();
-  const transformedSalaries = salaries.map((item) => ({
-    ...item,
-    salary: item.salary || { base: 0, bonus: 0 },
-  }));
+    const data = await response.json();
+    const filteredData = data.filter(salary => {
+        return (
+            salary &&
+            salary.salary &&
+            salary.company &&
+            salary.company.name === companyName &&
+            salary.specialization &&
+            salary.specialization.name === specializationName &&
+            typeof salary.salary.base === 'number' &&
+            typeof salary.specialization.name === 'string' &&
+            typeof salary.company.name === 'string'
+        );
+    });
+    let grades = {};
 
-  return transformedSalaries;
+    filteredData.forEach(item => {
+        const grade = item.grade;
+        if (!grades[grade]) {
+            grades[grade] = {
+                totalBaseSalary: 0,
+                totalBonusSalary: 0,
+                count: 0
+            };
+        }
+        grades[grade].totalBaseSalary += item.salary.base;
+        grades[grade].totalBonusSalary += item.salary.bonus;
+        grades[grade].count++;
+    });
+    const statistics = Object.keys(grades).map(grade => {
+        const averageBaseSalary = grades[grade].totalBaseSalary / grades[grade].count;
+        const averageBonusSalary = grades[grade].totalBonusSalary / grades[grade].count;
+        return {
+            grade,
+            averageBaseSalary,
+            averageBonusSalary
+        };
+    });
+    return statistics;
 }
