@@ -124,8 +124,6 @@ export default function AddSalary() {
           alignItems: "center",
         }}
       >
-        <h1>Please wait</h1>
-        <h2>Data is loading ...</h2>
         <CircularProgress />
       </div>
     );
@@ -141,6 +139,16 @@ export default function AddSalary() {
       }}
     >
       <FormControl sx={{ width: "450px", p: 3 }}>
+        <h1
+          style={{
+            textAlign: "center",
+            marginBottom: "25px",
+            marginTop: "15px",
+            color: "#163A4E",
+          }}
+        >
+          Add A Salary
+        </h1>
         <Select
           labelId="selectSpecialization"
           id="selectSpecialization"

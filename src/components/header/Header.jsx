@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import {
-    Container,
-    AppBar,
-    Typography,
-    Box,
-    Button,
-    IconButton,
-    Paper,
-    InputBase
+  Container,
+  AppBar,
+  Typography,
+  Box,
+  Button,
+  IconButton,
+  Paper,
+  InputBase,
 } from "@mui/material";
 import StairsIcon from "@mui/icons-material/Stairs";
 import SearchIcon from "@mui/icons-material/Search";
@@ -18,58 +18,58 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import ModalWindow from '../modalWindow/ModalWindow';
 import './header.scss';
 
-import { getCompanies } from '../../api/api';
-import { useAuthContext } from '../../context/AuthContextProvider';
+import { getCompanies } from "../../api/api";
+import { useAuthContext } from "../../context/AuthContextProvider";
 
 export default function Header() {
-    const { token } = useAuthContext();
-    const tokenExist = token && localStorage.getItem("token")!=='undefined';
-    const [companies, setCompanies] = useState([]);
-    const [filteredCompanies, setFilteredCompanies] = useState([]);
-    const [searchQuery, setSearchQuery] = useState('');
-    const [modalSearchCompanyActive, setModalSearchCompanyActive] = useState(false);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
+  const { token } = useAuthContext();
+  const tokenExist = token && localStorage.getItem("token") !== "undefined";
+  const [companies, setCompanies] = useState([]);
+  const [filteredCompanies, setFilteredCompanies] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [modalSearchCompanyActive, setModalSearchCompanyActive] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-    useEffect(() => {
-        if(tokenExist) {
-            updateCompanyList();
-        }
-    }, []);
-
-    useEffect(() => {
-        const filtered = companies.filter(company =>
-            company.name.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-        setFilteredCompanies(filtered);
-    }, [searchQuery, companies]);
-
-    const updateCompanyList = async () => {
-      try{
-          onCompanyLoading();
-          const response = await getCompanies(token);
-          onCompaniesLoaded(response);
-      }catch(error){
-          console.log(error)
-          onError(error);
-      }
-    };
-    const onCompanyLoading = () => {
-        setLoading(true);
-    };
-
-    const onCompaniesLoaded = (newCompanies) => {
-        setCompanies(newCompanies);
-        setLoading(false);
+  useEffect(() => {
+    if (tokenExist) {
+      updateCompanyList();
     }
+  }, []);
 
-    const onError = () => {
+  useEffect(() => {
+    const filtered = companies.filter((company) =>
+      company.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setFilteredCompanies(filtered);
+  }, [searchQuery, companies]);
+
+  const updateCompanyList = async () => {
+    try {
+      onCompanyLoading();
+      const response = await getCompanies(token);
+      onCompaniesLoaded(response);
+    } catch (error) {
+      console.log(error);
+      onError(error);
+    }
+  };
+  const onCompanyLoading = () => {
+    setLoading(true);
+  };
+
+  const onCompaniesLoaded = (newCompanies) => {
+    setCompanies(newCompanies);
+    setLoading(false);
+  };
+  
+  const onError = () => {
         setLoading(false);
         setError(true);
     }
-    const handleSearchChange = (event) => {
-        setSearchQuery(event.target.value);
-    };
+  const handleSearchChange = (event) => {
+      setSearchQuery(event.target.value);
+  };
 
     return (
         <Box sx={{ flexGrow: 1 }}>
